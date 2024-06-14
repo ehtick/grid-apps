@@ -31,7 +31,6 @@
         "connect": "^3.7.0",
         "earcut": "^2.2.3",
         "express-useragent": "^1.0.13",
-        "fs-extra": "^11.2.0",
         "jszip": "^3.7.1",
         "moment": "^2.29.4",
         "serve-static": "^1.14.1",
@@ -43,15 +42,17 @@
     },
     "devDependencies": {
         "electron": "latest",
-        "electron-builder": "latest"
+        "electron-builder": "latest",
+        "fs-extra": "^11.2.0",
+        "node-fetch": "^3.3.2"
     },
     "scripts": {
         "start": "electron .",
         "build": "npm run prebuild && electron-builder",
         "build-debug": "npm run prebuild && DEBUG=electron-builder electron-builder",
-        "prebuild": "node app-el-prep.js",
-        "postbuild": "bin/npm-post",
-        "preinstall": "bin/npm-pre"
+        "prebuild": "node bin/electron-pre.js",
+        "postbuild": "node bin/electron-post.js",
+        "preinstall": "node bin/install-pre.js"
     },
     "main": "app-el.js",
     "build": {
@@ -60,13 +61,18 @@
             {
                 "from": "tmp/src",
                 "to": "src",
-                "filter": [ "**/*" ]
+                "filter": [
+                    "**/*"
+                ]
             },
             {
                 "from": "tmp/web",
                 "to": "web",
-                "filter": [ "**/*" ]
+                "filter": [
+                    "**/*"
+                ]
             },
+            "bin/*",
             "conf/**/*",
             "data/**/*",
             "dist/**/*",
@@ -74,8 +80,7 @@
             "app.js",
             "package.json"
         ],
-        "extraFiles": [
-        ],
+        "extraFiles": [],
         "directories": {
             "output": "dist"
         },
