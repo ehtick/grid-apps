@@ -92,8 +92,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/build-linux/*.zip
-          asset_name: kiri-ubuntu-${{ env.TAG_NAME }}.AppImage
+          asset_path: artifacts/GridApps-linux-x64.zip
+          asset_name: kiri-ubuntu-${{ env.TAG_NAME }}.zip
           asset_content_type: application/octet-stream
 
       - name: Upload Release Asset (macOS)
@@ -103,8 +103,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/build-mac/*.zip
-          asset_name: kiri-macos-${{ env.TAG_NAME }}.dmg
+          asset_path: artifacts/GridApps-mac-arm64.zip
+          asset_name: kiri-macos-${{ env.TAG_NAME }}.zip
           asset_content_type: application/octet-stream
 
       - name: Upload Release Asset (Windows)
@@ -114,6 +114,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/build-win/*.zip
-          asset_name: kiri-windows-${{ env.TAG_NAME }}.exe
+          asset_path: artifacts/GridApps-win-x64.zip
+          asset_name: kiri-windows-${{ env.TAG_NAME }}.zip
           asset_content_type: application/octet-stream
