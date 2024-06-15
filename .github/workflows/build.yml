@@ -30,25 +30,28 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npm run build
 
+      - name: Display Build Artifacts
+        run: ls -l dist
+
       - name: Upload Linux artifact
         if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: build
+          name: build-linux
           path: dist/*.zip
 
       - name: Upload Windows artifact
         if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: build
+          name: build-win
           path: dist/*.zip
 
       - name: Upload Mac artifact
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: build
+          name: build-mac
           path: dist/*.zip
 
   create_release:
@@ -89,7 +92,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/build/*.zip
+          asset_path: artifacts/build-linux/*.zip
           asset_name: kiri-ubuntu-${{ env.TAG_NAME }}.AppImage
           asset_content_type: application/octet-stream
 
@@ -100,7 +103,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/build/*.zip
+          asset_path: artifacts/build-mac/*.zip
           asset_name: kiri-macos-${{ env.TAG_NAME }}.dmg
           asset_content_type: application/octet-stream
 
@@ -111,6 +114,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/build/*.zip
+          asset_path: artifacts/build-win/*.zip
           asset_name: kiri-windows-${{ env.TAG_NAME }}.exe
           asset_content_type: application/octet-stream
