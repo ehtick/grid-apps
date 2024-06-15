@@ -31,25 +31,25 @@ jobs:
         run: npm run build
 
       - name: Upload Linux artifact
+        if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v4
         with:
           name: kiri-${{ matrix.os }}-${{ github.ref_name }}
           path: dist/*.zip
-          if-no-files-found: ignore
 
       - name: Upload Windows artifact
+        if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
           name: kiri-${{ matrix.os }}-${{ github.ref_name }}
           path: dist/*.zip
-          if-no-files-found: ignore
 
       - name: Upload Mac artifact
+        if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
           name: kiri-${{ matrix.os }}-${{ github.ref_name }}
           path: dist/*.zip
-          if-no-files-found: ignore
 
   create_release:
     runs-on: ubuntu-latest
