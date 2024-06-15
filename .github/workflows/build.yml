@@ -52,6 +52,9 @@ jobs:
           curl -sSL https://github.com/cli/cli/releases/download/v2.0.0/gh_2.0.0_linux_amd64.tar.gz | tar -xz
           sudo mv gh_2.0.0_linux_amd64/bin/gh /usr/local/bin/
 
+      - name: Authenticate GitHub CLI
+        run: echo "${{ secrets.GH_TOKEN }}" | gh auth login --with-token
+
       - name: Check if release exists
         id: check_release
         run: |
