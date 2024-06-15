@@ -52,19 +52,25 @@ async function main() {
             // console.log({ link, target, absoluteTarget });
             try {
                 // Remove existing link if it exists
-                if (fs.existsSync(link)) {
-                    console.log({ unlink: link });
-                    fs.unlinkSync(link);
-                } else {
-                    console.log('no file', link);
-                }
+                // if (fs.existsSync(link)) {
+                //     console.log({ unlink: link });
+                //     fs.unlinkSync(link);
+                // } else {
+                //     console.log('no file', link);
+                // }
 
-                const targetStats = fs.lstatSync(absoluteTarget);
-                let type = targetStats.isDirectory() ? 'junction' : 'file';
+                console.log({ win32_replace: link });
+                await fs.remove(link).catch(error => console.log({ remove_error: error }));
 
-                // Create the symlink
-                console.log(`relink: ${link} as ${type}`);
-                fs.symlinkSync(absoluteTarget, link, type);
+                // console.log({ copy: absoluteTarget, to: link });
+                await fs.copy(absoluteTarget, link, { dereference: true }).catch(error => console.log({ copy_error: error }));
+
+                // const targetStats = fs.lstatSync(absoluteTarget);
+                // let type = targetStats.isDirectory() ? 'junction' : 'file';
+
+                // // Create the symlink
+                // console.log(`relink: ${link} as ${type}`);
+                // fs.symlinkSync(absoluteTarget, link, type);
             } catch (err) {
                 // console.error(`Error creating symlink: ${link} -> ${target}`, err);
                 console.error(`Error creating symlink: ${link} -> ${absoluteTarget}`, err);
