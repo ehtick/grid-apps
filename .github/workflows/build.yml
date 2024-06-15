@@ -44,31 +44,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Extract tag name
-        run: node bin/github-getver.js
-
-      - name: Install GitHub CLI
-        run: |
-          curl -sSL https://github.com/cli/cli/releases/download/v2.0.0/gh_2.0.0_linux_amd64.tar.gz | tar -xz
-          sudo mv gh_2.0.0_linux_amd64/bin/gh /usr/local/bin/
-
-      - name: Authenticate GitHub CLI
-        run: echo "${{ secrets.GH_TOKEN }}" | gh auth login --with-token
-
-      - name: Check if release exists
-        id: check_release
-        run: |
-          if gh release view ${{ env.TAG_NAME }}; then
-            echo "Release exists"
-            echo "release_exists=true" >> $GITHUB_ENV
-          else
-            echo "Release does not exist"
-            echo "release_exists=false" >> $GITHUB_ENV
-          fi
-
-      - name: Delete existing release
-        if: env.release_exists == 'true'
-        run: gh release delete ${{ env.TAG_NAME }} --yes
+      - name: Create release name
+        run: node bin/github-getver.js "${{ github.event_name }}"
 
       - name: Create GitHub Release
         id: create_release

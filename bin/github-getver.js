@@ -1,17 +1,18 @@
-// for github build workflow, extract version to use in build name
+// create version for release for github build workflow
 
 const fs = require('fs');
-const path = require('path');
+const type = process.argv[2];
 
-if (process.env.GITHUB_ENV) {
-    // Read package.json
-    const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+if (type && process.env.GITHUB_ENV) {
+    const pkgVer = JSON.parse(fs.readFileSync('package.json', 'utf8')).version;
+    const rando = ((Math.random() * 0xfff) & 0xfff).toString().padStart(4,0);
+    const releaseTag =
+        type === 'workflow_dispatch' ? `${pkgVer}.${rando}` :
+        type === 'push' ? pkgVer :
+        (`rogue-` + ( (Math.random() * 0xfffff) & 0xfffff ))
 
-    // Get the version from package.json
-    const version = packageJson.version || `manual-${new Date().toISOString().replace(/[:.]/g, '-')}`;
+    console.log({ type, version: pkgVer, releaseTag });
 
-    // Write the version to GITHUB_ENV file for further steps
-    fs.appendFileSync(process.env.GITHUB_ENV, `TAG_NAME=${version}\n`);
-
-    console.log(`Extracted version: ${version}`);
+    // write version to GITHUB_ENV file
+    fs.appendFileSync(process.env.GITHUB_ENV, `TAG_NAME=${releaseTag}\n`);
 }
