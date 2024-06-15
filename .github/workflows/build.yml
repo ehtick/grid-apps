@@ -37,13 +37,7 @@ jobs:
           path: dist/
 
       - name: Extract tag name
-        id: extract_tag_name
-        run: |
-          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-          else
-            echo "TAG_NAME=manual-$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
-          fi
+        run: node bin/github-getver.js
 
       - name: Create GitHub Release
         id: create_release
