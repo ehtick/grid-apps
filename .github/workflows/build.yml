@@ -45,8 +45,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Extract tag name
-        id: extract_version
-        run: echo "TAG_NAME=$(node -p \"require('./package.json').version\")" >> $GITHUB_ENV
+        run: node bin/github-getver.js
 
       - name: Install GitHub CLI
         run: |
