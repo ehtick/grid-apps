@@ -41,26 +41,35 @@ async function main() {
 
     const links = fs.readFileSync("links.csv")
         .toString()
+        .trim()
         .split('\n')
-        .map(line => line.split(','));
-
-    console.log({ links, platform: os.platform() });
+        .map(line => line.trim())
+        .map(line => line.split(',').map(v => v.trim()));
 
     if (os.platform() === 'win32')
-    for (let [ link, target ] of links) {
-        try {
-            console.log('unlink', link)
-            // Remove existing link if it exists
-            if (fs.existsSync(link)) {
-                fs.unlinkSync(link);
+        for (let [link, target] of links) {
+            const absoluteTarget = path.resolve(path.dirname(link), target);
+            // console.log({ link, target, absoluteTarget });
+            try {
+                // Remove existing link if it exists
+                if (fs.existsSync(link)) {
+                    console.log({ unlink: link });
+                    fs.unlinkSync(link);
+                } else {
+                    console.log('no file', link);
+                }
+
+                const targetStats = fs.lstatSync(absoluteTarget);
+                let type = targetStats.isDirectory() ? 'junction' : 'file';
+
+                // Create the symlink
+                console.log(`relink: ${link} as ${type}`);
+                fs.symlinkSync(absoluteTarget, link, type);
+            } catch (err) {
+                // console.error(`Error creating symlink: ${link} -> ${target}`, err);
+                console.error(`Error creating symlink: ${link} -> ${absoluteTarget}`, err);
             }
-            // Create the symlink
-            console.log(`symlink: ${link} -> ${target}`);
-            fs.symlinkSync(target, link, 'junction'); // 'junction' is used for directories on Windows
-        } catch (err) {
-            console.error(`Error creating symlink: ${link} -> ${target}`, err);
         }
-    }
 }
 
 main().catch(err => console.error('Error', err));
