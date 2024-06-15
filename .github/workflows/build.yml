@@ -58,11 +58,31 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Download and Upload Release Assets (Linux)
+      - name: Download Release Assets (Linux)
         if: needs.build.outputs.os == 'ubuntu-latest'
         uses: actions/download-artifact@v4.1.7
         with:
           name: kiri-ubuntu-latest-master
+
+      - name: Download Release Assets (macOS)
+        if: needs.build.outputs.os == 'macos-latest'
+        uses: actions/download-artifact@v4.1.7
+        with:
+          name: kiri-macos-latest-master
+
+      - name: Download Release Assets (Windows)
+        if: needs.build.outputs.os == 'windows-latest'
+        uses: actions/download-artifact@v4.1.7
+        with:
+          name: kiri-windows-latest-master
+
+      - name: Download All Release Assets
+        uses: actions/download-artifact@v4.1.7
+        with:
+          path: artifacts
+
+      - name: Display Downloaded Assets
+        run: ls -R
 
       - name: Upload Release Asset (Linux)
         if: needs.build.outputs.os == 'ubuntu-latest'
@@ -71,15 +91,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/*
+          asset_path: artifacts/*
           asset_name: kiri-ubuntu-latest-master.zip
           asset_content_type: application/zip
-
-      - name: Download and Upload Release Assets (macOS)
-        if: needs.build.outputs.os == 'macos-latest'
-        uses: actions/download-artifact@v4.1.7
-        with:
-          name: kiri-macos-latest-master
 
       - name: Upload Release Asset (macOS)
         if: needs.build.outputs.os == 'macos-latest'
@@ -88,15 +102,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/*
+          asset_path: artifacts/*
           asset_name: kiri-macos-latest-master.zip
           asset_content_type: application/zip
-
-      - name: Download and Upload Release Assets (Windows)
-        if: needs.build.outputs.os == 'windows-latest'
-        uses: actions/download-artifact@v4.1.7
-        with:
-          name: kiri-windows-latest-master
 
       - name: Upload Release Asset (Windows)
         if: needs.build.outputs.os == 'windows-latest'
@@ -105,6 +113,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/*
+          asset_path: artifacts/*
           asset_name: kiri-windows-latest-master.zip
           asset_content_type: application/zip
