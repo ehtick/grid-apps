@@ -60,13 +60,13 @@ jobs:
 
       - name: Download and Upload Release Assets (Linux)
         if: needs.build.outputs.os == 'ubuntu-latest'
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4.1.7
         with:
-          name: kiri-ubuntu-latest-${{ github.ref_name }}
+          name: kiri-ubuntu-latest-${{ env.TAG_NAME }}
 
       - name: Upload Release Asset (Linux)
         if: needs.build.outputs.os == 'ubuntu-latest'
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
@@ -77,13 +77,13 @@ jobs:
 
       - name: Download and Upload Release Assets (macOS)
         if: needs.build.outputs.os == 'macos-latest'
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4.1.7
         with:
-          name: kiri-macos-latest-${{ github.ref_name }}
+          name: kiri-macos-latest-${{ env.TAG_NAME }}
 
       - name: Upload Release Asset (macOS)
         if: needs.build.outputs.os == 'macos-latest'
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
@@ -94,13 +94,13 @@ jobs:
 
       - name: Download and Upload Release Assets (Windows)
         if: needs.build.outputs.os == 'windows-latest'
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4.1.7
         with:
-          name: kiri-windows-latest-${{ github.ref_name }}
+          name: kiri-windows-latest-${{ env.TAG_NAME }}
 
       - name: Upload Release Asset (Windows)
         if: needs.build.outputs.os == 'windows-latest'
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
