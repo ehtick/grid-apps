@@ -30,11 +30,23 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npm run build
 
-      - name: Upload artifact(s)
+      - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
         with:
           name: kiri-${{ matrix.os }}-${{ github.ref_name }}
-          path: ['dist/*.AppImage','dist/*.dmg','dist/*.exe']
+          path: dist/*.AppImage
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kiri-${{ matrix.os }}-${{ github.ref_name }}
+          path: dist/*.exe
+
+      - name: Upload Mac artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kiri-${{ matrix.os }}-${{ github.ref_name }}
+          path: dist/*.dmg
 
   create_release:
     runs-on: ubuntu-latest
